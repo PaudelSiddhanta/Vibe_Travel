@@ -1,0 +1,7 @@
+#!/Users/catalinbotezat/Documents/NYUAD/NY/Advanced_Topics_Data_Science_LLM/Project/Vibe_Travel/venv/bin/python3
+import sys
+from dotenv.__main__ import cli
+if __name__ == '__main__':
+    if sys.argv[0].endswith('.exe'):
+        sys.argv[0] = sys.argv[0][:-4]
+    sys.exit(cli())
