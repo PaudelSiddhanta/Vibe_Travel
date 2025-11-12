@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from google.adk.agents.llm_agent import Agent
 import os
 from tavily import TavilyClient
