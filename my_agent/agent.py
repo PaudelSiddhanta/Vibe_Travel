@@ -1,5 +1,5 @@
-from google.adk.agents.llm_agent import Agent
 import os
+from google.generativeai.agents import Agent  # Corrected import path
 from tavily import TavilyClient
 
 tavily_client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
