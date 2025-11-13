@@ -5,7 +5,11 @@ from dotenv import load_dotenv
 from google.adk import Agent
 from google.adk.tools import google_search
 from google.adk.tools.agent_tool import AgentTool
-from .tools import export_to_google_sheet_tool, export_to_google_doc_tool, delete_google_file_tool # Import the new tools
+# Import tools - handles both relative (module) and absolute (script) imports
+try:
+    from .tools import export_to_google_sheet_tool, export_to_google_doc_tool, delete_google_file_tool
+except ImportError:
+    from tools import export_to_google_sheet_tool, export_to_google_doc_tool, delete_google_file_tool
 load_dotenv()
 
 
@@ -268,3 +272,53 @@ Inform the user about the outcome of each step. If an export is successful, prov
     ]
 
 )
+
+# Test script - run this file directly to test the agent
+if __name__ == "__main__":
+    import sys
+    
+    print("="*60)
+    print("🧪 Testing Travel Planner Agent")
+    print("="*60)
+    
+    # Check environment variables
+    if not MODEL_ID:
+        print("❌ ERROR: MODEL_ID environment variable is not set!")
+        print("   Please set MODEL_ID in your .env file or environment variables.")
+        print("   Example: MODEL_ID=gemini-2.0-flash-exp")
+        sys.exit(1)
+    
+    print(f"\n✅ Agent Configuration:")
+    print(f"   Agent Name: {root_agent.name}")
+    print(f"   Model: {root_agent.model}")
+    print(f"   Number of Tools: {len(root_agent.tools)}")
+    print(f"   Project ID: {PROJECT_ID or 'Not set'}")
+    print(f"   Location: {LOCATION or 'Not set'}")
+    
+    # Test agent creation
+    print(f"\n✅ All agents created successfully!")
+    print(f"   - Location Finder: {location_finder_based_on_interests.name}")
+    print(f"   - Flight Recommender: {flight_recommender.name}")
+    print(f"   - Hotel Recommender: {hotel_recommender.name}")
+    print(f"   - Itinerary Recommender: {itinerary_recommender.name}")
+    print(f"   - Food Recommender: {food_recommender.name}")
+    print(f"   - Financial Planner: {financial_planner_agent.name}")
+    print(f"   - Root Agent: {root_agent.name}")
+    
+    # Check if agent has run_live method
+    if hasattr(root_agent, 'run_live'):
+        print(f"\n🚀 Agent supports interactive mode (run_live)")
+        print(f"\n   To test interactively, run:")
+        print(f"   python test_agent2.py")
+        print(f"\n   Or use run_live() in your code:")
+        print(f"   root_agent.run_live()")
+    else:
+        print(f"\n⚠️  Agent doesn't have run_live method")
+        print(f"   Available methods: {[m for m in dir(root_agent) if not m.startswith('_') and 'run' in m.lower()]}")
+    
+    print(f"\n✅ Agent setup is complete!")
+    print(f"\n💡 Next steps:")
+    print(f"   1. Run 'python test_agent2.py' for comprehensive testing")
+    print(f"   2. Deploy the agent to Google Cloud AI Platform for production use")
+    print(f"   3. Use the agent in your application code")
+    print("="*60)
